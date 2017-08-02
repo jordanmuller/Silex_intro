@@ -1,0 +1,153 @@
+{# La page hérite du layout #}
+{% extends "layout.html.twig" %}
+
+{# On surcharle le block stylesheet #}
+{% block stylesheets %}
+    {{ parent() }} {# reprend le contenu du bloc parent #}
+    <link href="{{asset('css/test.css')}}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{# Surcharge du bloc "content" défini dans le layout #}
+{% block content %}
+    <p class="test"><b>Page de test</b></p>
+    
+    {# Affiche la variable var qui a été passé à la vue par le contrôleur #}
+    <p>{{ var }}</p>
+    
+    {# set '' définie une nouvelle variable dans la vue #}
+    {% set newVar = 'Autre variable' %}
+    
+    <p>{{ newVar }}</p>
+    
+    {# Pour concaténer, on se sert de "~"#}
+    <p>{{ newVar ~ " !"}}</p>
+    
+    {% set vrai = true %}
+    
+    {# Condition sur un booléen #}
+    {% if vrai %}
+        <p>C'est vrai</p>
+    {% else %}
+        <p>C'est faux</p>
+    {% endif %}
+    
+    {# Même opérateur de comparaison qu'en PHP #}
+    {% if newVar == 'Autre variable' %}
+        <p>newVar vaut "Autre variable"</p>
+    {% endif %}
+    
+    {# and et or pour && et || #}
+    {% if newVar == 'Autre variable' and vrai %}
+        <p>newVar vaut "Autre variable" et vrai est true</p>
+    {% endif %}
+    
+    {# if not pour ! #}
+    {% if not vrai %}
+        <p>C'est faux</p>
+    {% endif %}
+    
+    {# tableau indexé #}
+    {% set tab = [1, 2, 3, 4] %}
+    
+    {# en PHP, foreach($tab AS $nb) #}
+    <p>
+        {% for nb in tab %}
+            {{ nb }}<br>
+        {% endfor %}
+    </p>
+    
+    {# Pour créer une séquence à la volée (eq : for($i = 0; $i <= 5; $i++)) #}
+    <p>
+        {% for nb in 0..5 %}
+            {{ nb }}<br>
+        {% endfor %}
+    </p>
+    
+    {# Tableau associatif #}
+    {# $hash = ['foo' => 'Foo', 'bar' => 'Bar']; #}
+    {% set hash = {foo: "Foo", bar: "Bar"} %}
+    
+    {# En PHP, foreach($hash AS $key => $value) #}
+    {% for key, value in hash %}
+        {{ key }} : {{ value }}<br>
+    {% endfor %}
+    
+    {% set emptyArray = [] %}
+    
+    {% for val in emptyArray %}
+        {{ val }}
+    {% else %} {# On rentre dans le else si le tableau est vide #}
+        <p>Le tableau emptyArray est vide.</p>
+    {% endfor %}
+    
+    <p>{{hash['foo']}}</p> {# élément d'un tableau #}
+    <p>{{hash.foo}}</p> {# notation courte #}
+    
+    {# test avec is #}
+    {% if emptyArray is empty %}
+        <p>Le tableau emptyArray est vide</p>
+    {% endif %}
+    
+    {# test avec is not #}
+    {% if hash is not empty %}
+        <p>Le tableau hash n'est pas vide</p>
+    {% endif %}
+    
+    {% set dix = 10 %}
+    
+    {#  #}
+    {% if dix is divisibleby(5) %}
+        <p>Dix est divisble par cinq</p>
+    {% endif %}
+    
+    {% if dix is even %} {# even/odd : pair/impair #}
+        <p>Dix est pair</p>
+    {% endif %}
+    
+    <p>
+        {% for nb in 0..5 %}
+            {# loop donne des informations sur la boucle #}
+            {% if loop.first %}
+                Premier tour de boucle.<br>
+            {% endif %}
+            
+            {% if loop.last %}
+                Dernier tour de boucle.<br>
+            {% endif %}
+            
+            {% if loop.index is odd %}
+                Tour impair :<br>
+            {% endif %}
+            
+            {{ nb }}<br>
+        {% endfor %}
+    </p>
+    
+    {# Equivalent du var_dump en PHP #}
+    <p>{{ dump(hash) }}</p> 
+    
+    {# Application d'un filtre avec | #}
+    {# filtre uppercase #}
+    <p>{{ var|upper }}</p>
+    
+    {# filtre date #}
+    <p>{{ now|date('d/m/Y')}}</p>
+    
+    {% set html = '<p>Paragraphe</p>' %}
+    
+    {# Par défaut, twig échappe le html #}
+    {{ html }}
+    
+    {# Pour ne pas échapper le html #}
+    {{ html|raw }}
+    
+    {# Inclusion de fichier #}
+    {% include 'include.html.twig' with {bla: 'Blabla'} %}
+{% endblock %}
+
+{# On surcharge le bloc "title" dans le layout #}
+{% block title 'Twig' %}
+    
+    {# Equivaut à
+    {% block title %}Test{% endblock %}
+    #}

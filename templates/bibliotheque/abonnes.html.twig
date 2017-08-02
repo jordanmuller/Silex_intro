@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <table border="1" style="border-collapse: collapse; text-align: center; ">
+        <tr>
+            <th style="padding: 10px;">Id abonné</th>
+            <th style="padding: 10px;">Prénom</th>
+            <th style="padding: 10px;">Action</th>
+            <th style="padding: 10px;">Modifier</th>
+            <th style="padding: 10px;">Supprimer</th>
+        <tr>
+        {# abonnes est un tableau de tableau (suite au fecthAll) 
+        abonne est un tableau simple
+        #}
+        {% for abonne in abonnes %}
+            <tr>
+            {% for info in abonne %}
+                <td style="padding: 10px;">{{ info }}</td>
+            {% endfor %}
+            {# On aurait pu écrire 
+            <td>{{ abonne.id_abonne }}</td>
+            <td>{{ abonne.prenom }}</td>
+            #}
+            <td style="padding: 10px;"><a href="{{ path('abonne_detail', {id: abonne.id_abonne}) }}">Voir le détail de l'abonné</a></td>
+            <td style="padding: 10px;"><a href="{{ path('abonne_modif', {id: abonne.id_abonne}) }}">Modifier l'abonné</a></td>
+            <td style="padding: 10px;"><a href="{{ path('abonne_suppression', {id: abonne.id_abonne}) }}">Supprimer l'abonné</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    {# On passe dans path la valeur bind de la page web souhaitée #}
+    <p><a href="{{ path('abonne_ajout') }}">Ajouter un abonné</a></p>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Affichage des emprunts' %}
+
+{% block content %}
+    <table border="1" style="border-collapse: collapse; text-align: center; ">
+        <tr>
+            <th style="padding: 10px;">id_emprunt</th>
+            <th style="padding: 10px;">Prenom</th>
+            <th style="padding: 10px;">Auteur</th>
+            <th style="padding: 10px;">Titre</th>
+            <th style="padding: 10px;">Date de sortie</th>
+            <th style="padding: 10px;">Date de rendu</th>
+        </tr>
+        {% for emprunt in emprunts %}   
+        <tr>
+            {% for key, info in emprunt %}
+                {# Si l'indice de l'array $emprunt['key'] == 'date_sortie' || 'date_rendu' && !empty($info) #}
+                {% if key == 'date_sortie' or  key == 'date_rendu' and info is not empty %}
+                    <td style="padding: 10px;"> {{ info|date('d/m/Y') }}</td>
+                {% else %}
+                    <td style="padding: 10px;"> {{ info }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+
